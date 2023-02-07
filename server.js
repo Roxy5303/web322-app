@@ -8,9 +8,9 @@
  *  Student ID: 160169215
  *  Date: 6 February 2023
  *
- *  Cyclic Web App URL: https://plum-hungry-dalmatian.cyclic.app
+ *  Cyclic Web App URL: https://super-slippers-seal.cyclic.app/about#
  *
- *  GitHub Repository URL: https://github.com/Roxy5303/helloworld
+ *  GitHub Repository URL: https://github.com/Roxy5303/web322-app
  *
  ********************************************************************************/
 var HTTP_PORT = process.env.PORT || 8080;
