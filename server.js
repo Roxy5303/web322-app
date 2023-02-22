@@ -6,7 +6,7 @@
  *
  *  Name: Rahi Kiransinh Raolji
  *  Student ID: 160169215
- *  Date: 6 February 2023
+ *  Date: 21 February 2023
  *
  *  Cyclic Web App URL: https://super-slippers-seal.cyclic.app/about#
  *
@@ -19,6 +19,19 @@ var app = express();
 const path = require("path");
 
 const blogData = require("./blog-service");
+
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+
+cloudinary.config({
+  cloud_name: "dmmpv7xxz",
+  api_key: "955468951464545",
+  api_secret: "3knlJgcttwmEGEUE7-rwat6u1aA",
+  secure: true,
+});
+
+const upload = multer(); // no { storage: storage } since we are not using disk storage
 
 app.use(express.static("public"));
 
@@ -68,6 +81,42 @@ app.get("/categories", (req, res) => {
 app.get("/posts/add", (req, res) => {
   const addPostPath = path.join(__dirname, "views", "addPost.html");
   res.sendFile(addPostPath);
+});
+
+app.post("/posts/add", upload.single("featureImage"), (req, res) => {
+  if (req.file) {
+    let streamUpload = (req) => {
+      return new Promise((resolve, reject) => {
+        let stream = cloudinary.uploader.upload_stream((error, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        });
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+    };
+    async function upload(req) {
+      let result = await streamUpload(req);
+      console.log(result);
+      return result;
+    }
+    upload(req).then((uploaded) => {
+      processPost(uploaded.url);
+    });
+  } else {
+    processPost("");
+  }
+
+  function processPost(imageUrl) {
+    req.body.featureImage = imageUrl;
+    // TODO: Process the req.body and add it as a new Blog Post before redirecting to /posts
+    blogData.addPostPath(req.body).then(() => {
+      res.redirect("/posts");
+    });
+  }
+  res.redirect("/posts");
 });
 
 app.use((req, res) => {
