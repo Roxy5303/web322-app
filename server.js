@@ -65,9 +65,9 @@ app.get("/categories", (req, res) => {
 });
 
 // GET /posts/add route
-app.get('/posts/add', (req, res) => {
-  const addPost = path.join(__dirname, 'views', 'addPost.html');
-  res.sendFile(addPost);
+app.get("/posts/add", (req, res) => {
+  const addPostPath = path.join(__dirname, "views", "addPost.html");
+  res.sendFile(addPostPath);
 });
 
 app.use((req, res) => {
