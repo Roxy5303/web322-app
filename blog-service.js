@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { resolve } = require("path");
 
 let posts = [];
 let categories = [];
@@ -36,6 +37,62 @@ module.exports.getPublishedPosts = function () {
     filteredPosts.length > 0
       ? resolve(filteredPosts)
       : reject("no results returned");
+  });
+};
+
+module.exports.addPost = (post) => {
+  return new promises((resolve, reject) => {
+    if (typeof post.published === undefined) {
+      post.published = false;
+    } else {
+      post.published = true;
+    }
+    post.id = posts.length + 1;
+    post.push(post);
+    resolve(Post);
+  });
+};
+
+module.exports.getPostsByCategory = (category) => {
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    for (var i = 0; i < posts.length; i++) {
+      if (posts[i].category === category) {
+        temp.push(posts[i]);
+      }
+    }
+    if (temp) {
+      resolve(temp);
+    } else {
+      reject("No results returned");
+    }
+  });
+};
+
+module.exports.getPostsByMinDate = (minDate) => {
+  return new Promise((resolve, reject) => {
+    var temp = [];
+    for (var i = 0; i < posts.length; i++) {
+      if (new Date(posts[i].postDate) >= new Date(minDate)) {
+        temp.push(posts[i]);
+      }
+    }
+    if (temp) {
+      resolve(temp);
+    } else {
+      reject("No results returned");
+    }
+  });
+};
+
+module.exports.getPostsbyId = (id) => {
+  return new Promise((resolve, reject) => {
+    var temp;
+    if (posts.id === id) {
+      resolve(posts);
+    } else {
+      reject("No results returned");
+    }
   });
 };
 
