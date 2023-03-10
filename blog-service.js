@@ -41,7 +41,7 @@ module.exports.getPublishedPosts = function () {
 };
 
 module.exports.addPost = (post) => {
-  return new promises((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (typeof post.published === undefined) {
       post.published = false;
     } else {
